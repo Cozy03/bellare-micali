@@ -362,7 +362,7 @@ Contributions are welcome! To ensure a smooth collaboration process, please adhe
 
 ## References
 
-1. **Bellare, M., & Micali, S. (1989).** *Non-Interactive Oblivious Transfer and Applications*. [Link](https://link.springer.com/article/10.1007/BF00255296)
+1. **Bellare, M., & Micali, S. (1989).** *Non-Interactive Oblivious Transfer and Applications*. [Link](https://cseweb.ucsd.edu/~mihir/papers/niot.pdf)
 2. **curve25519-dalek Documentation**: [https://docs.rs/curve25519-dalek/latest/curve25519_dalek/](https://docs.rs/curve25519-dalek/latest/curve25519_dalek/)
 3. **Rust Cryptography Working Group Guidelines**: [https://github.com/RustCrypto](https://github.com/RustCrypto)
 4. **Oblivious Transfer**: [Wikipedia](https://en.wikipedia.org/wiki/Oblivious_transfer)

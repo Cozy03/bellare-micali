@@ -128,13 +128,13 @@ Add the crate to your project's `Cargo.toml`:
 
 ```toml
 [dependencies]
-bellare_micali_ot = "0.1.0" # Replace with the actual version
+bellare_micali = "0.1.0" # Replace with the actual version
 ```
 
 Then, include it in your project:
 
 ```rust
-use bellare_micali_ot::{OTProtocol, Message, OTError};
+use bellare_micali::{OTProtocol, Message, OTError};
 ```
 
 ## Usage
@@ -144,7 +144,7 @@ use bellare_micali_ot::{OTProtocol, Message, OTError};
 Below is a simple example demonstrating how to initialize and execute the OT protocol.
 
 ```rust
-use bellare_micali_ot::{OTProtocol, Message};
+use bellare_micali::{OTProtocol, Message};
 use rand::rngs::OsRng;
 
 fn main() -> Result<(), OTError> {
@@ -187,7 +187,7 @@ fn main() -> Result<(), OTError> {
 For scenarios requiring multiple OT transfers simultaneously, utilize the batch processing capabilities.
 
 ```rust
-use bellare_micali_ot::{BatchOTProtocol, OTProtocol, Message};
+use bellare_micali::{BatchOTProtocol, OTProtocol, Message};
 use rand::rngs::OsRng;
 
 fn main() -> Result<(), OTError> {

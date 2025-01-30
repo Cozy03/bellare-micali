@@ -17,7 +17,9 @@ impl Message {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```rust
+    /// use bellare_micali::types::Message;
+    ///
     /// let msg = Message::new(vec![1, 2, 3]);
     /// ```
     pub fn new(data: Vec<u8>) -> Self {
@@ -32,7 +34,9 @@ impl Message {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```rust
+    /// use bellare_micali::types::Message;
+    ///
     /// let msg = Message::new(vec![1, 2, 3]);
     /// assert_eq!(msg.as_bytes(), &[1, 2, 3]);
     /// ```
@@ -59,7 +63,7 @@ pub struct Sender {
     ///
     /// This scalar is used in cryptographic computations to generate the public point `c`.
     #[allow(dead_code)]
-    pub(crate) u: Scalar, // Changed from private to pub(crate)
+    pub(crate) u: Scalar,
 
     /// The sender's public Ristretto point.
     ///
@@ -72,7 +76,9 @@ impl Sender {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```rust
+    /// use bellare_micali::types::Sender;
+    ///
     /// let sender = Sender::new();
     /// ```
     pub fn new() -> Self {
@@ -80,16 +86,15 @@ impl Sender {
         use rand::rngs::OsRng;
 
         let u = Scalar::random(&mut OsRng);
-        let c = &u * &RISTRETTO_BASEPOINT_POINT;
+        let c = u * RISTRETTO_BASEPOINT_POINT;
         Sender { u, c }
     }
-
-    // Additional methods for the Sender can be implemented here.
+    
 }
 
 /// Represents the receiver's state in the Oblivious Transfer (OT) protocol.
 ///
-/// The `Receiver` struct maintains the receiver's private scalar `k` and a boolean `choice`
+/// The `Receiver` struct maintains the receiver's private scalar `k` and a boolean `choice`.
 pub struct Receiver {
     /// The receiver's private scalar value.
     ///
@@ -111,7 +116,9 @@ impl Receiver {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```rust
+    /// use bellare_micali::types::Receiver;
+    ///
     /// let receiver = Receiver::new(true);
     /// ```
     pub fn new(choice: bool) -> Self {
@@ -120,8 +127,6 @@ impl Receiver {
         let k = Scalar::random(&mut OsRng);
         Receiver { k, choice }
     }
-
-    // Additional methods for the Receiver can be implemented here.
 }
 
 /// Represents the ciphertext structure for encrypted messages in the OT protocol.
@@ -157,8 +162,10 @@ impl Ciphertext {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```rust
+    /// use bellare_micali::types::Ciphertext;
     /// use curve25519_dalek::ristretto::RistrettoPoint;
+    ///
     /// let point = RistrettoPoint::default();
     /// let data = vec![1, 2, 3];
     /// let ciphertext = Ciphertext::new(point, data);
@@ -185,5 +192,3 @@ impl Ciphertext {
         &self.v2
     }
 }
-
-// Additional module-level documentation can be added here if necessary.

@@ -8,7 +8,7 @@ use sha2::{Digest, Sha256};
 /// various cryptographic operations essential for the OT protocol. These utilities
 /// include generating random scalars, hashing Ristretto points to arbitrary lengths,
 /// and performing XOR operations on byte slices.
-pub(crate) struct CryptoUtils;
+pub struct CryptoUtils;
 
 impl CryptoUtils {
     /// Generates a random scalar using a cryptographically secure random number generator.
@@ -36,11 +36,12 @@ impl CryptoUtils {
     ///
     /// ```rust
     /// use rand::rngs::OsRng;
+    /// use bellare_micali::crypto::CryptoUtils;
     ///
     /// let mut rng = OsRng;
     /// let random_scalar = CryptoUtils::random_scalar(&mut rng);
     /// ```
-    pub(crate) fn random_scalar<R: RngCore + CryptoRng>(rng: &mut R) -> Scalar {
+    pub fn random_scalar<R: RngCore + CryptoRng>(rng: &mut R) -> Scalar {
         let mut bytes = [0u8; 64];
         rng.fill_bytes(&mut bytes);
         Scalar::from_bytes_mod_order_wide(&bytes)
@@ -67,12 +68,13 @@ impl CryptoUtils {
     ///
     /// ```rust
     /// use curve25519_dalek::ristretto::RistrettoPoint;
+    /// use bellare_micali::crypto::CryptoUtils;
     ///
     /// let point = RistrettoPoint::default();
     /// let hashed_bytes = CryptoUtils::hash_point_to_length(&point, 64);
     /// assert_eq!(hashed_bytes.len(), 64);
     /// ```
-    pub(crate) fn hash_point_to_length(point: &RistrettoPoint, length: usize) -> Vec<u8> {
+    pub fn hash_point_to_length(point: &RistrettoPoint, length: usize) -> Vec<u8> {
         let mut hasher = Sha256::new();
         let compressed = point.compress();
         let point_bytes = compressed.as_bytes();
@@ -116,12 +118,14 @@ impl CryptoUtils {
     /// # Example
     ///
     /// ```rust
+    /// use bellare_micali::crypto::CryptoUtils;
+    ///
     /// let a = vec![0xAA, 0xBB, 0xCC];
     /// let b = vec![0xFF, 0x00, 0xFF];
     /// let result = CryptoUtils::xor_bytes(&a, &b);
     /// assert_eq!(result, vec![0x55, 0xBB, 0x33]);
     /// ```
-    pub(crate) fn xor_bytes(a: &[u8], b: &[u8]) -> Vec<u8> {
+    pub fn xor_bytes(a: &[u8], b: &[u8]) -> Vec<u8> {
         debug_assert_eq!(a.len(), b.len(), "XOR requires equal length inputs");
         a.iter().zip(b.iter()).map(|(&x, &y)| x ^ y).collect()
     }

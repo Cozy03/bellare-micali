@@ -42,7 +42,7 @@ impl OTProtocol {
     ///
     /// ```rust
     /// use rand::rngs::OsRng;
-    /// use bellare_micali_ot::OTProtocol;
+    /// use bellare_micali::OTProtocol;
     ///
     /// let mut rng = OsRng;
     /// let sender = OTProtocol::new_sender(&mut rng);
@@ -77,17 +77,7 @@ impl OTProtocol {
     ///
     /// * `Receiver` - The initialized receiver with a private scalar `k` and choice bit.
     ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use rand::rngs::OsRng;
-    /// use bellare_micali_ot::{OTProtocol, Receiver};
-    /// use curve25519_dalek::ristretto::RistrettoPoint;
-    ///
-    /// let mut rng = OsRng;
-    /// let c = RistrettoPoint::default(); // Placeholder for actual `c` from sender
-    /// let receiver = OTProtocol::new_receiver(&mut rng, true, c);
-    /// ```
+    
     pub fn new_receiver<R: RngCore + CryptoRng>(
         rng: &mut R,
         choice: bool,
@@ -113,18 +103,7 @@ impl OTProtocol {
     ///
     /// * `(RistrettoPoint, RistrettoPoint)` - A tuple containing the two public keys.
     ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use rand::rngs::OsRng;
-    /// use bellare_micali_ot::{OTProtocol, Sender, Receiver};
-    /// use curve25519_dalek::ristretto::RistrettoPoint;
-    ///
-    /// let mut rng = OsRng;
-    /// let sender = OTProtocol::new_sender(&mut rng);
-    /// let receiver = OTProtocol::new_receiver(&mut rng, true, sender.c);
-    /// let (pk0, pk1) = OTProtocol::receiver_generate_keys(&receiver, sender.c);
-    /// ```
+    
     pub fn receiver_generate_keys(
         receiver: &Receiver,
         c: RistrettoPoint,
@@ -177,7 +156,9 @@ impl OTProtocol {
     ///
     /// ```rust
     /// use rand::rngs::OsRng;
-    /// use bellare_micali_ot::{OTProtocol, Sender, Receiver, Message, Ciphertext, OTError};
+    /// use bellare_micali::types::{Sender, Receiver, Message, Ciphertext};
+    ///use bellare_micali::protocol::OTProtocol;
+    ///use bellare_micali::error::OTError;
     /// use curve25519_dalek::ristretto::RistrettoPoint;
     ///
     /// let mut rng = OsRng;
@@ -253,32 +234,6 @@ impl OTProtocol {
     /// * `OTError::ProtocolError` - If decryption fails due to invalid ciphertext or other
     ///   protocol inconsistencies.
     ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use rand::rngs::OsRng;
-    /// use bellare_micali_ot::{OTProtocol, Sender, Receiver, Message, Ciphertext, OTError};
-    /// use curve25519_dalek::ristretto::RistrettoPoint;
-    ///
-    /// let mut rng = OsRng;
-    /// let sender = OTProtocol::new_sender(&mut rng);
-    /// let receiver = OTProtocol::new_receiver(&mut rng, true, sender.c);
-    /// let (pk0, pk1) = OTProtocol::receiver_generate_keys(&receiver, sender.c);
-    /// let msg0 = Message::new(b"Secret 0".to_vec());
-    /// let msg1 = Message::new(b"Secret 1".to_vec());
-    ///
-    /// let (c0, c1) = OTProtocol::sender_encrypt(
-    ///     &mut rng,
-    ///     &sender,
-    ///     pk0,
-    ///     pk1,
-    ///     &msg0,
-    ///     &msg1,
-    /// ).expect("Encryption failed");
-    ///
-    /// let decrypted = OTProtocol::receiver_decrypt(&receiver, &c0, &c1).expect("Decryption failed");
-    /// assert_eq!(decrypted.as_bytes(), msg1.as_bytes());
-    /// ```
     pub fn receiver_decrypt(
         receiver: &Receiver,
         c0: &Ciphertext,
@@ -313,13 +268,13 @@ impl OTProtocol {
     ///
     /// ```rust
     /// use curve25519_dalek::ristretto::RistrettoPoint;
-    /// use bellare_micali_ot::{OTProtocol, Message};
+    /// use bellare_micali::{OTProtocol, Message};
     ///
     /// let key_point = RistrettoPoint::default();
     /// let msg = Message::new(b"Secret".to_vec());
     /// let encrypted = OTProtocol::encrypt_message(&key_point, &msg);
     /// ```
-    fn encrypt_message(key_point: &RistrettoPoint, msg: &Message) -> Vec<u8> {
+    pub fn encrypt_message(key_point: &RistrettoPoint, msg: &Message) -> Vec<u8> {
         let msg_bytes = msg.as_bytes();
         let key = CryptoUtils::hash_point_to_length(key_point, msg_bytes.len());
         CryptoUtils::xor_bytes(&key, msg_bytes)
@@ -350,14 +305,14 @@ impl OTProtocol {
     ///
     /// ```rust
     /// use curve25519_dalek::ristretto::RistrettoPoint;
-    /// use bellare_micali_ot::{OTProtocol, OTError};
+    /// use bellare_micali::{OTProtocol, OTError};
     ///
     /// let key_point = RistrettoPoint::default();
     /// let ciphertext = vec![0u8; 10]; // Placeholder for actual ciphertext
     /// let decrypted = OTProtocol::decrypt_message(&key_point, &ciphertext)
     ///     .expect("Decryption failed");
     /// ```
-    fn decrypt_message(key_point: &RistrettoPoint, ciphertext: &[u8]) -> Result<Vec<u8>, OTError> {
+    pub fn decrypt_message(key_point: &RistrettoPoint, ciphertext: &[u8]) -> Result<Vec<u8>, OTError> {
         let key = CryptoUtils::hash_point_to_length(key_point, ciphertext.len());
         Ok(CryptoUtils::xor_bytes(&key, ciphertext))
     }

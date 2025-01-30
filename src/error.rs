@@ -23,7 +23,11 @@ pub enum OTError {
     /// # Example
     ///
     /// ```rust
-    /// return Err(OTError::InvalidPublicKey);
+    /// use bellare_micali::error::OTError;
+    ///
+    /// fn example() -> Result<(), OTError> {
+    ///     Err(OTError::InvalidPublicKey)
+    /// }
     /// ```
     #[error("Invalid public key verification")]
     InvalidPublicKey,
@@ -41,7 +45,9 @@ pub enum OTError {
     /// # Example
     ///
     /// ```rust
-    /// return Err(OTError::ProtocolError("Unexpected message format".into()));
+    /// use bellare_micali::error::OTError;
+    ///
+    /// let error: OTError = OTError::new_protocol_error("Unexpected message format".into());
     /// ```
     #[error("Protocol error: {0}")]
     ProtocolError(String),
@@ -53,7 +59,9 @@ impl OTError {
     /// # Example
     ///
     /// ```rust
-    /// let error = OTError::new_invalid_public_key();
+    /// use bellare_micali::error::OTError;
+    ///
+    /// let error: OTError = OTError::new_invalid_public_key();
     /// ```
     pub fn new_invalid_public_key() -> Self {
         OTError::InvalidPublicKey
@@ -68,7 +76,9 @@ impl OTError {
     /// # Example
     ///
     /// ```rust
-    /// let error = OTError::new_protocol_error("Missing required field".into());
+    /// use bellare_micali::error::OTError;
+    ///
+    /// let error: OTError = OTError::new_protocol_error("Missing required field".into());
     /// ```
     pub fn new_protocol_error(message: String) -> Self {
         OTError::ProtocolError(message)

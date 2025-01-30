@@ -1,6 +1,6 @@
 [package]
 name = "bellare-micali"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Debrup Chatterjee <debrupc3@gmail.com>"]
 description = "Implementation of Bellare-Micali 1-out-of-2 Oblivious Transfer Protocol"

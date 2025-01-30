@@ -96,7 +96,7 @@ Add this crate to your Rust project:
 
 ```toml
 [dependencies]
-bellare_micali = "0.1.1"
+bellare_micali = "0.1.2"
 ```
 
 Include it in your Rust code:

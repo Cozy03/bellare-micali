@@ -1,8 +1,8 @@
 # Bellare-Micali 1-out-of-2 Oblivious Transfer
 
-![Crates.io](https://img.shields.io/crates/v/bellare_micali_ot.svg)
-![Documentation](https://docs.rs/bellare_micali_ot/badge.svg)
-![Build Status](https://img.shields.io/github/actions/workflow/status/yourusername/bellare_micali_ot/ci.yml?branch=main)
+![Crates.io](https://img.shields.io/crates/v/bellare-micali.svg)
+![Documentation](https://docs.rs/bellare-micali/badge.svg)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Cozy03/bellare-micali/ci.yml?branch=main)
 
 ## Table of Contents
 

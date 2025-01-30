@@ -6,8 +6,8 @@ authors = ["Debrup Chatterjee <debrupc3@gmail.com>"]
 description = "Implementation of Bellare-Micali 1-out-of-2 Oblivious Transfer Protocol"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/debrupc3/bellare-micali"
-documentation = "https://docs.rs/bellare-micali"
+repository = "https://github.com/Cozy03/bellare-micali"
+documentation = "https://docs.rs/bellare-micali/0.1.0"
 keywords = ["cryptography", "oblivious-transfer", "privacy", "secure-computation", "mpc"]
 categories = ["cryptography", "algorithms", "mathematics"]
 

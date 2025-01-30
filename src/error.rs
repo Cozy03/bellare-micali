@@ -27,7 +27,7 @@ pub enum OTError {
     /// ```
     #[error("Invalid public key verification")]
     InvalidPublicKey,
-    
+
     /// Represents a generic protocol-related error with a descriptive message.
     ///
     /// This variant is used to capture and convey various protocol-specific

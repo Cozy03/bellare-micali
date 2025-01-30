@@ -1,6 +1,6 @@
 use curve25519_dalek::{RistrettoPoint, Scalar};
 use rand_core::{CryptoRng, RngCore};
-use sha2::{Sha256, Digest};
+use sha2::{Digest, Sha256};
 
 /// Cryptographic utility functions for the Oblivious Transfer (OT) protocol.
 ///
@@ -45,7 +45,7 @@ impl CryptoUtils {
         rng.fill_bytes(&mut bytes);
         Scalar::from_bytes_mod_order_wide(&bytes)
     }
-    
+
     /// Hashes a Ristretto point to a byte vector of a specified length.
     ///
     /// This function takes a `RistrettoPoint` and produces a deterministic byte vector
@@ -77,7 +77,7 @@ impl CryptoUtils {
         let compressed = point.compress();
         let point_bytes = compressed.as_bytes();
         let mut output = Vec::with_capacity(length);
-        
+
         // Keep hashing until we have enough bytes
         let mut counter = 0u64;
         while output.len() < length {
@@ -87,12 +87,12 @@ impl CryptoUtils {
             output.extend_from_slice(&hash);
             counter += 1;
         }
-        
+
         // Truncate to exact length
         output.truncate(length);
         output
     }
-    
+
     /// Performs a bitwise XOR operation on two byte slices of equal length.
     ///
     /// This function takes two slices of bytes (`a` and `b`) and returns a new `Vec<u8>`
@@ -123,9 +123,6 @@ impl CryptoUtils {
     /// ```
     pub(crate) fn xor_bytes(a: &[u8], b: &[u8]) -> Vec<u8> {
         debug_assert_eq!(a.len(), b.len(), "XOR requires equal length inputs");
-        a.iter()
-            .zip(b.iter())
-            .map(|(&x, &y)| x ^ y)
-            .collect()
+        a.iter().zip(b.iter()).map(|(&x, &y)| x ^ y).collect()
     }
 }

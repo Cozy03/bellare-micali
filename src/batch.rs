@@ -1,9 +1,9 @@
-use crate::{Message, OTProtocol, OTError};
-use curve25519_dalek::{RistrettoPoint, constants::RISTRETTO_BASEPOINT_POINT as G};
+use crate::crypto::CryptoUtils;
+use crate::{Message, OTError, OTProtocol};
+use curve25519_dalek::{constants::RISTRETTO_BASEPOINT_POINT as G, RistrettoPoint};
+use rand::rngs::OsRng;
 use rand_core::{CryptoRng, RngCore};
 use rayon::prelude::*;
-use crate::crypto::CryptoUtils;
-use rand::rngs::OsRng;
 
 /// Batch processing implementation of the Bellare-Micali 1-out-of-2 Oblivious Transfer (OT) Protocol.
 ///
@@ -44,9 +44,9 @@ impl BatchOTProtocol {
     /// ```
     fn optimal_chunk_size(msg_size: usize) -> usize {
         match msg_size {
-            0..=64 => 64,     // Small messages
-            65..=1024 => 32,  // Medium messages
-            _ => 16,          // Large messages
+            0..=64 => 64,    // Small messages
+            65..=1024 => 32, // Medium messages
+            _ => 16,         // Large messages
         }
     }
 
@@ -117,7 +117,7 @@ impl BatchOTProtocol {
         // Calculate optimal chunk size
         let msg_size = msgs0.first().map_or(0, |m| m.as_bytes().len());
         let _chunk_size = Self::optimal_chunk_size(msg_size);
-        
+
         // Create sender for all transfers
         let sender = OTProtocol::new_sender(rng);
 
@@ -127,11 +127,11 @@ impl BatchOTProtocol {
             .map(|i| {
                 // Create thread-local RNG
                 let mut thread_rng = OsRng;
-                
+
                 // Create receiver and keys
                 let receiver = OTProtocol::new_receiver(&mut thread_rng, choices[i], sender.c);
                 let (pk0, pk1) = OTProtocol::receiver_generate_keys(&receiver, sender.c);
-                
+
                 // Encrypt and decrypt
                 let (c0, c1) = OTProtocol::sender_encrypt(
                     &mut thread_rng,
@@ -141,14 +141,14 @@ impl BatchOTProtocol {
                     &msgs0[i],
                     &msgs1[i],
                 )?;
-                
+
                 OTProtocol::receiver_decrypt(&receiver, &c0, &c1)
             })
             .collect();
 
         results
     }
-    
+
     /// Optimized batch key generation for multiple OT transfers.
     ///
     /// This function generates the necessary public keys for a batch of OT transfers based
@@ -185,14 +185,15 @@ impl BatchOTProtocol {
         sender_pk: RistrettoPoint,
         choices: &[bool],
     ) -> Vec<(RistrettoPoint, RistrettoPoint)> {
-        choices.par_iter()
+        choices
+            .par_iter()
             .map(|&choice| {
                 let mut rng = OsRng;
                 let k = CryptoUtils::random_scalar(&mut rng);
-                
+
                 let pk_b = G * k;
                 let pk_not_b = sender_pk - pk_b;
-                
+
                 if choice {
                     (pk_not_b, pk_b)
                 } else {
@@ -206,7 +207,7 @@ impl BatchOTProtocol {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     /// Tests the batch processing functionality of the OT protocol.
     ///
     /// This test verifies that the `batch_transfer` function correctly handles multiple
@@ -222,23 +223,21 @@ mod tests {
     fn test_batch_processing() {
         let mut rng = OsRng;
         let batch_sizes = [1, 10, 50, 100];
-        
+
         for &size in batch_sizes.iter() {
             let msgs0: Vec<_> = (0..size)
                 .map(|i| Message::new(format!("Secret0 {}", i).into_bytes()))
                 .collect();
-            
+
             let msgs1: Vec<_> = (0..size)
                 .map(|i| Message::new(format!("Secret1 {}", i).into_bytes()))
                 .collect();
-            
-            let choices: Vec<_> = (0..size)
-                .map(|i| i % 2 == 0)
-                .collect();
-            
+
+            let choices: Vec<_> = (0..size).map(|i| i % 2 == 0).collect();
+
             let results = BatchOTProtocol::batch_transfer(&mut rng, &msgs0, &msgs1, &choices)
                 .expect("Batch transfer failed");
-            
+
             for (i, (result, &choice)) in results.iter().zip(choices.iter()).enumerate() {
                 let expected = if choice {
                     format!("Secret1 {}", i)
@@ -249,7 +248,7 @@ mod tests {
             }
         }
     }
-    
+
     /// Tests the batch transfer function with unequal batch sizes.
     ///
     /// This test ensures that the `batch_transfer` function correctly identifies and
@@ -261,7 +260,7 @@ mod tests {
         let msgs0 = vec![Message::new(vec![0u8; 32])];
         let msgs1 = vec![Message::new(vec![1u8; 32]), Message::new(vec![1u8; 32])];
         let choices = vec![true];
-        
+
         assert!(BatchOTProtocol::batch_transfer(&mut rng, &msgs0, &msgs1, &choices).is_err());
     }
 }

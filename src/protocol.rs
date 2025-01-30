@@ -390,18 +390,11 @@ mod tests {
             let receiver = OTProtocol::new_receiver(&mut rng, choice, sender.c);
             let (pk0, pk1) = OTProtocol::receiver_generate_keys(&receiver, sender.c);
 
-            let (c0, c1) = OTProtocol::sender_encrypt(
-                &mut rng,
-                &sender,
-                pk0,
-                pk1,
-                &msg0,
-                &msg1,
-            )
-            .expect("Encryption failed");
+            let (c0, c1) = OTProtocol::sender_encrypt(&mut rng, &sender, pk0, pk1, &msg0, &msg1)
+                .expect("Encryption failed");
 
-            let decrypted = OTProtocol::receiver_decrypt(&receiver, &c0, &c1)
-                .expect("Decryption failed");
+            let decrypted =
+                OTProtocol::receiver_decrypt(&receiver, &c0, &c1).expect("Decryption failed");
 
             if choice {
                 assert_eq!(decrypted.as_bytes(), msg1.as_bytes());

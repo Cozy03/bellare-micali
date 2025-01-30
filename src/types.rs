@@ -23,7 +23,7 @@ impl Message {
     pub fn new(data: Vec<u8>) -> Self {
         Self(data)
     }
-    
+
     /// Returns a byte slice of the message data.
     ///
     /// # Returns
@@ -59,7 +59,7 @@ pub struct Sender {
     ///
     /// This scalar is used in cryptographic computations to generate the public point `c`.
     #[allow(dead_code)]
-    pub(crate) u: Scalar,  // Changed from private to pub(crate)
+    pub(crate) u: Scalar, // Changed from private to pub(crate)
 
     /// The sender's public Ristretto point.
     ///

@@ -84,7 +84,8 @@ impl CryptoUtils {
         let mut counter = 0u64;
         while output.len() < length {
             hasher.update(point_bytes);
-            hasher.update(&counter.to_le_bytes());
+            hasher.update(counter.to_le_bytes());
+
             let hash = hasher.finalize_reset();
             output.extend_from_slice(&hash);
             counter += 1;

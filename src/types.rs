@@ -89,7 +89,13 @@ impl Sender {
         let c = u * RISTRETTO_BASEPOINT_POINT;
         Sender { u, c }
     }
-    
+}
+
+/// Implements `Default` for `Sender`, allowing it to be initialized with `Sender::default()`.
+impl Default for Sender {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 /// Represents the receiver's state in the Oblivious Transfer (OT) protocol.

@@ -74,7 +74,12 @@ impl BatchOTProtocol {
                 let receiver = OTProtocol::new_receiver(&mut thread_rng, choices[i], sender.c);
                 let (pk0, pk1) = OTProtocol::receiver_generate_keys(&receiver, sender.c);
                 let (c0, c1) = OTProtocol::sender_encrypt(
-                    &mut thread_rng, &sender, pk0, pk1, &msgs0[i], &msgs1[i],
+                    &mut thread_rng,
+                    &sender,
+                    pk0,
+                    pk1,
+                    &msgs0[i],
+                    &msgs1[i],
                 )?;
                 OTProtocol::receiver_decrypt(&receiver, &c0, &c1)
             })

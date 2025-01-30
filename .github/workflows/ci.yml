@@ -39,9 +39,14 @@ jobs:
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
 
-      - name: Install Clippy
-        run: rustup component add clippy
+      - name: Debug Rust Environment
+        run: |
+          rustc --version
+          cargo --version
+          cargo clippy --version
 
       - name: Run Clippy
         run: cargo clippy -- -D warnings
@@ -56,10 +61,8 @@ jobs:
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
-
-      - name: Install Rustfmt
-        run: rustup component add rustfmt
+        with:
+          components: rustfmt
 
       - name: Check Formatting
         run: cargo fmt -- --check
-

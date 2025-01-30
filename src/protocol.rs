@@ -77,7 +77,6 @@ impl OTProtocol {
     ///
     /// * `Receiver` - The initialized receiver with a private scalar `k` and choice bit.
     ///
-
     pub fn new_receiver<R: RngCore + CryptoRng>(
         rng: &mut R,
         choice: bool,
@@ -103,7 +102,6 @@ impl OTProtocol {
     ///
     /// * `(RistrettoPoint, RistrettoPoint)` - A tuple containing the two public keys.
     ///
-
     pub fn receiver_generate_keys(
         receiver: &Receiver,
         c: RistrettoPoint,
